@@ -18,11 +18,6 @@
                 <h2 class="text-3xl font-bold text-white mb-4">Start Your Journey</h2>
                 <p class="text-blue-200/80 leading-relaxed">Join thousands of users who already trust MyMoney to manage
                     their personal finances.</p>
-                <div class="mt-8 flex justify-center gap-2">
-                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-                    <div class="w-2 h-2 rounded-full bg-blue-500/50"></div>
-                    <div class="w-2 h-2 rounded-full bg-blue-500/50"></div>
-                </div>
             </div>
         </div>
 
@@ -49,6 +44,9 @@
                                 <input type="text" id="username" name="username" placeholder="Someone"
                                     autocomplete="off" autofocus
                                     class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition duration-200">
+                                @error('username')
+                                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -57,6 +55,9 @@
                                 <input type="email" id="email" name="email" placeholder="you@example.com"
                                     autocomplete="off"
                                     class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition duration-200">
+                                @error('email')
+                                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
@@ -66,6 +67,9 @@
                                     <input type="password" id="password" name="password" placeholder="Min. 8 chars"
                                         autocomplete="off"
                                         class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition duration-200">
+                                    @error('password')
+                                        <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div>
                                     <label for="password_confirmation"
@@ -73,6 +77,9 @@
                                     <input type="password" id="password_confirmation" name="password_confirmation"
                                         placeholder="Repeat password" autocomplete="off"
                                         class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition duration-200">
+                                    @error('password_confirmation')
+                                        <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 

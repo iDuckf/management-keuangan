@@ -34,6 +34,9 @@
                                 <input type="email" id="email" name="email" placeholder="you@example.com"
                                     autocomplete="off" autofocus
                                     class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                                @error('email')
+                                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div>
@@ -42,10 +45,13 @@
                                 <input type="password" id="password" name="password" placeholder="Enter your password"
                                     autocomplete="off"
                                     class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                                @error('password')
+                                    <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                                @enderror
                             </div>
 
                             <div class="flex items-center justify-end">
-                                <a href="#"
+                                <a href="{{ route('forgot-password') }}"
                                     class="text-sm text-emerald-500 hover:text-emerald-400 transition duration-200">Forgot
                                     password?</a>
                             </div>

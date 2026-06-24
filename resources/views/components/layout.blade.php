@@ -77,6 +77,23 @@
 
         {{-- Main Content --}}
         <main class="flex-1 p-8">
+            @if (session('success'))
+                <div id="flash-success"
+                    class="mb-6 px-4 py-3 bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 rounded-xl">
+                    {{ session('success') }}
+                </div>
+
+                <script>
+                    setTimeout(() => {
+                        const el = document.getElementById('flash-success');
+                        if (el) {
+                            el.style.transition = 'opacity 0.5s ease';
+                            el.style.opacity = '0';
+                            setTimeout(() => el.remove(), 500);
+                        }
+                    }, 3500);
+                </script>
+            @endif
             {{ $slot }}
         </main>
     </div>

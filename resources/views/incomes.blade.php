@@ -98,7 +98,8 @@
                                     {{ Str::limit($income->description, 50, '...') }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        <button onclick="openEditModal(1)"
+                                        <button
+                                            onclick='openEditModal({{ $income->id }}, @json($income))'
                                             class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition duration-200 cursor-pointer"
                                             title="Edit">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -107,7 +108,7 @@
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
-                                        <button onclick="openDeleteModal(1)"
+                                        <button onclick="openDeleteModal({{ $income->id }})"
                                             class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-600/10 rounded-lg transition duration-200 cursor-pointer"
                                             title="Delete">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
@@ -143,38 +144,58 @@
                 </div>
                 <form class="p-6 space-y-4" method="POST" action="{{ route('incomes-save') }}">
                     @csrf
-                    @method('post')
+                    @method('POST')
 
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Source</label>
                         <input type="text" name="source" placeholder="e.g. Monthly Salary"
+                            value="{{ old('source') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('source')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Amount</label>
-                        <input type="number" name="amount" placeholder="0"
+                        <input type="number" name="amount" placeholder="0" value="{{ old('amount') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('amount')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
-                        <input type="date" name="date"
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        <input type="date" name="date" value="{{ old('date') }}"
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
+                        @error('date')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
                         <select name="category_id"
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
                             <option value="" class="bg-gray-800">Select category</option>
-                            <option value="1" class="bg-gray-800">Salary</option>
-                            <option value="2" class="bg-gray-800">Freelance</option>
-                            <option value="3" class="bg-gray-800">Investment</option>
+                            @foreach ($categories as $category)
+                                @if ($category->type === 'income')
+                                    <option value="{{ $category->id }}" class="bg-gray-800"
+                                        @selected(old('category_id') == $category->id)>{{ $category->name }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
+                        @error('category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
                         <textarea name="description" rows="2" placeholder="Add notes..."
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none">{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <button type="button" onclick="closeModal('addIncomeModal')"
@@ -206,35 +227,45 @@
                         </svg>
                     </button>
                 </div>
-                <form class="p-6 space-y-4">
+                <form id="editIncomeForm" class="p-6 space-y-4" method="POST" action="">
+                    @csrf
+                    @method('PUT')
+
+                    <input type="hidden" id="edit_id" name="id">
+
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Source</label>
-                        <input type="text" name="source" value="Monthly Salary"
+                        <input type="text" name="source" id="edit_source"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Amount</label>
-                        <input type="number" name="amount" value="5000000"
+                        <input type="number" name="amount" id="edit_amount"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
-                        <input type="date" name="date" value="2024-06-01"
+                        <input type="date" name="date" id="edit_date"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
-                        <select name="category_id"
+                        <select name="category_id" id="edit_category_id"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
-                            <option value="1" selected class="bg-gray-800">Salary</option>
-                            <option value="2" class="bg-gray-800">Freelance</option>
-                            <option value="3" class="bg-gray-800">Investment</option>
+                            <option value="" class="bg-gray-800">Select category</option>
+                            @foreach ($categories as $category)
+                                @if ($category->type === 'income')
+                                    <option value="{{ $category->id }}" class="bg-gray-800"
+                                        @selected(old('category_id') == $category->id)>{{ $category->name }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
-                        <textarea name="description" rows="2" placeholder="Add notes..."
+                        <textarea name="description" id="edit_description" rows="2" placeholder="Add notes..."
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none"></textarea>
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
@@ -257,25 +288,30 @@
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('deleteIncomeModal')"></div>
         <div class="fixed inset-0 flex items-center justify-center p-4">
             <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-6 text-center">
-                <div class="mx-auto w-14 h-14 bg-red-600/10 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
-                </div>
-                <h2 class="text-lg font-bold mb-2">Delete Income</h2>
-                <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this income entry? This action
-                    cannot be undone.</p>
-                <div class="flex items-center justify-center gap-3">
-                    <button onclick="closeModal('deleteIncomeModal')"
-                        class="px-4 py-2.5 text-gray-400 hover:text-white font-medium rounded-xl transition duration-200 cursor-pointer">
-                        Cancel
-                    </button>
-                    <button onclick="closeModal('deleteIncomeModal')"
-                        class="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
-                        Delete
-                    </button>
-                </div>
+                <form method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="id" id="delete_id">
+                    <div class="mx-auto w-14 h-14 bg-red-600/10 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold mb-2">Delete Income</h2>
+                    <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this income entry? This action
+                        cannot be undone.</p>
+                    <div class="flex items-center justify-center gap-3">
+                        <button type="button" onclick="closeModal('deleteIncomeModal')"
+                            class="px-4 py-2.5 text-gray-400 hover:text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                            Delete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -291,11 +327,29 @@
             document.body.style.overflow = '';
         }
 
-        function openEditModal(id) {
+        function openEditModal(id, data) {
+            // 1. Isi data ke elemen form modal edit
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_source').value = data.source;
+            document.getElementById('edit_amount').value = data.amount;
+
+            if (data.date) {
+                document.getElementById('edit_date').value = data.date.substring(0, 10);
+            }
+
+            document.getElementById('edit_category_id').value = data.category_id;
+            document.getElementById('edit_description').value = data.description || '';
+
+            // 2. Ubah action form secara dinamis (sesuaikan endpoint route Laravel-mu)
+            document.getElementById('editIncomeForm').action = `/incomes/${id}`;
+
+            // 3. Panggil fungsi openModal bawaanmu
             openModal('editIncomeModal');
         }
 
         function openDeleteModal(id) {
+            document.getElementById('delete_id').value = id;
+            document.querySelector('#deleteIncomeModal form').action = `/incomes/${id}`;
             openModal('deleteIncomeModal');
         }
         document.addEventListener('keydown', function(e) {
@@ -307,5 +361,11 @@
                 });
             }
         });
+
+        @if ($errors->hasAny(['source', 'amount', 'date', 'category_id']))
+            document.addEventListener('DOMContentLoaded', function() {
+                openModal('addIncomeModal');
+            });
+        @endif
     </script>
 </x-layout>

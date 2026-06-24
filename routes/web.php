@@ -35,5 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories', [AdminController::class, 'categoriesShow'])->name('categories-show');
     Route::get('/expenses', [AdminController::class, 'expensesShow'])->name('expenses-show');
 
-    Route::post('/incomes', [AdminController::class, 'incomesSave'])->name('incomes-save');
+    Route::post('/incomes', [AdminController::class, 'incomeSave'])->name('incomes-save');
+    Route::put('/incomes/{income:id}', [AdminController::class, 'incomeEdit'])->name('income-edit');
+    Route::delete('/incomes/{income:id}', [AdminController::class, 'incomeDelete'])->name('income-delete');
 });

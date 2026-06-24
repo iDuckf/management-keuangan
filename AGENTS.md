@@ -1,6 +1,6 @@
 # AGENTS.md — mymoney
 
-Fresh Laravel 12 skeleton (no custom app code yet). Default SQLite.
+Laravel 12 personal finance manager. Default SQLite.
 
 ## Commands
 
@@ -14,11 +14,27 @@ Fresh Laravel 12 skeleton (no custom app code yet). Default SQLite.
 
 ## Architecture
 
-- **Routes**: `routes/web.php` (only welcome view), `routes/console.php`
-- **Models**: `app/Models/User.php` only
-- **Migrations**: default users, cache, jobs tables
+- **Routes**: `routes/web.php`, `routes/console.php`
+- **Models**: `app/Models/User.php` only (migrations exist for incomes, categories, expenses tables but models not yet created)
+- **Migrations**: default users/cache/jobs + `incomes`, `categories`, `expenses`
 - **Frontend**: Tailwind CSS 4 via `@tailwindcss/vite`, Vite with `laravel-vite-plugin`
-- **DB**: SQLite default (`DB_CONNECTION=sqlite` — no MySQL/Postgres configured)
+- **Layout**: `<x-layout>` component (`app/View/Components/layout.php` + `resources/views/components/layout.blade.php`) — sidebar nav with emerald accent
+- **DB**: SQLite default (`DB_CONNECTION=sqlite`)
+
+## Views
+
+| Route | View | Features |
+|---|---|---|
+| `/dashboard` | `dashboard.blade.php` | Dashboard stub |
+| `/incomes` | `incomes.blade.php` | Summary cards + table + modals (Add/Edit/Delete) |
+| `/categories` | `categories.blade.php` | Card grid by type + modals (Add/Edit/Delete) |
+| `/expenses` | `expenses.blade.php` | Summary cards + table + modals (Add/Edit/Delete) |
+
+All CRUD views use `<x-layout>`, follow dark theme (`bg-gray-950`, `bg-gray-900` cards), and include vanilla JS modal toggles (Escape key closes). Forms include proper input names matching migration columns for easy backend wiring.
+
+## CRUD Modal Pattern
+
+Each view has three modals: Add (green save), Edit (blue update), Delete (red confirmation). JS functions `openModal(id)` / `closeModal(id)` control visibility. Modals use `fixed inset-0 z-50` with backdrop blur.
 
 ## Testing
 

@@ -8,6 +8,7 @@ use App\Notifications\ResetPasswordNotification;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -55,5 +56,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'user_id');
+    }
+
+    public function incomes(): HasMany
+    {
+        return $this->hasMany(Income::class, 'user_id');
+    }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class, 'user_id');
     }
 }

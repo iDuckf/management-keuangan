@@ -30,4 +30,10 @@ Route::post('/email/verification-notification', [AuthContoller::class, 'resendEm
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::post('/logout', [AuthContoller::class, 'logout'])->name('logout');
+    Route::get('/incomes', [AdminController::class, 'incomesShow'])->name('incomes-show');
+    Route::get('/categories', [AdminController::class, 'categoriesShow'])->name('categories-show');
+    Route::get('/expenses', [AdminController::class, 'expensesShow'])->name('expenses-show');
+
+    Route::post('/incomes', [AdminController::class, 'incomesSave'])->name('incomes-save');
 });

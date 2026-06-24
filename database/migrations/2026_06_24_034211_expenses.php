@@ -8,26 +8,26 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('category_id')->constrained(
                 table: 'categories',
-                indexName: 'incomes_category_id'
-            )->cascadeOnDelete(); // Jika pakai sistem kategori
+                indexName: 'expenses_category_id'
+            )->cascadeOnDelete(); // Relasi ke tabel kategori
             $table->foreignId('user_id')->constrained(
                 table: 'users',
-                indexName: 'incomes_user_id'
+                indexName: 'expenses_user_id'
             )->cascadeOnDelete(); // Relasi ke table users
-            $table->string('source'); // Contoh: Gaji, Freelance, dll.
-            $table->decimal('amount', 15, 2); // Nominal uang
-            $table->date('date'); // Tanggal pemasukan
+            $table->string('title'); // Contoh: Bayar Kos, Makan Siang
+            $table->decimal('amount', 15, 2); // Nominal pengeluaran
+            $table->date('date'); // Tanggal pengeluaran
             $table->text('description')->nullable(); // Catatan opsional
-            $table->timestamps(); // created_at & updated_at
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('expenses');
     }
 };

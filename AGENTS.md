@@ -33,7 +33,10 @@ All CRUD routes are inside `Route::middleware('auth')->group(...)`:
 | POST | `/incomes` | `incomeSave` | `incomes-save` |
 | PUT | `/incomes/{income:id}` | `incomeEdit` | `income-edit` |
 | DELETE | `/incomes/{income:id}` | `incomeDelete` | `income-delete` |
-| GET | `/categories` | `categoriesShow` | `categories-show` |
+| GET | `/categories` | `categoryShow` | `categories-show` |
+| POST | `/categories` | `categorySave` | `category-save` |
+| PUT | `/categories/{category:id}` | `categoryEdit` | `category-edit` |
+| DELETE | `/categories/{category:id}` | `categoryDelete` | `category-delete` |
 | GET | `/expenses` | `expensesShow` | `expenses-show` |
 
 ## Models
@@ -74,11 +77,20 @@ Each view has three modals: Add (green save), Edit (blue update), Delete (red co
 
 ### Edit Modal — Data Pre-fill
 
-Edit button passes data via `@json($model)` wrapped in single-quoted `onclick`:
+Edit button passes data via `@json($model)` **must** be wrapped in **single-quoted** `onclick`. Double quotes break the attribute because `@json` outputs structural `"`:
 ```blade
 onclick='openEditModal({{ $income->id }}, @json($income))'
 ```
 JS function fills form fields by ID (`edit_id`, `edit_source`, etc.) and dynamically sets form `action` to `/incomes/${id}`.
+
+### Color Picker — Real-time Hex Sync
+
+Color input paired with hex text input. Add `oninput="this.nextElementSibling.value = this.value"` on the `<input type="color">`:
+```blade
+<input type="color" name="color" oninput="this.nextElementSibling.value = this.value">
+<input type="text" name="color_hex">
+```
+In edit modals (where IDs exist), use `document.getElementById('edit_color_hex').value = this.value` instead.
 
 ### Delete Modal — Form Pattern
 

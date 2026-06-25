@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Income;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -32,11 +34,12 @@ class AdminController extends Controller
             'totalIncomes' => $totalIncomes,
             'totalThisMonth' => $totalIncomesThisMonth,
             'totalEntries' => $jumlahRowIncomes,
-            'incomes' => $incomes,
+            'incomes' => $user->incomes()->paginate(10),
             'categories' => $categories
         ]);
     }
 
+    // INCOMES
     public function incomeSave(Request $request)
     {
         $request->validate([
@@ -87,13 +90,63 @@ class AdminController extends Controller
         return redirect()->route('incomes-show')->with('success', 'Income entry kamu berhasil dihapus!');
     }
 
-    public function categoriesShow()
+    // CATEGORIES
+    public function categoryShow()
     {
+        $user = User::where('email', session('email'))->first();
+
+        $groupedCategories = $user->categories()->get()->groupBy('type');
+
         return view('categories', [
             'title' => 'Categories',
+            'groupedCategories' => $groupedCategories
         ]);
     }
 
+    public function categorySave(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'color_hex' => 'required|string'
+        ]);
+
+        Category::create([
+            'user_id' => session('id'),
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'type' => Str::lower($request->type),
+            'color' => $request->color_hex
+        ]);
+
+        return redirect()->route('categories-show')->with('success', 'Category baru berhasil ditambahkan!');
+    }
+
+    public function categoryEdit(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'type' => 'required|string|max:100',
+            'color_hex' => 'required|string'
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+            'type' => Str::lower($request->type),
+            'color' => $request->color_hex
+        ]);
+
+        return redirect()->route('categories-show')->with('success', 'Category berhasil diperbarui!');
+    }
+
+    public function categoryDelete(Category $category)
+    {
+        $category->delete();
+        return redirect()->route('categories-show')->with('success', 'Category berhasil dihapus!');
+    }
+
+    // EXPENSES
     public function expensesShow()
     {
         return view('expenses', [

@@ -127,6 +127,8 @@
         </div>
     </div>
 
+    {{ $incomes->links() }}
+
     {{-- Add Income Modal --}}
     <div id="addIncomeModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('addIncomeModal')"></div>
@@ -177,7 +179,7 @@
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
                             <option value="" class="bg-gray-800">Select category</option>
                             @foreach ($categories as $category)
-                                @if ($category->type === 'income')
+                                @if ($category->type === Str::lower('Income'))
                                     <option value="{{ $category->id }}" class="bg-gray-800"
                                         @selected(old('category_id') == $category->id)>{{ $category->name }}
                                     </option>
@@ -299,7 +301,8 @@
                         </svg>
                     </div>
                     <h2 class="text-lg font-bold mb-2">Delete Income</h2>
-                    <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this income entry? This action
+                    <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this income entry? This
+                        action
                         cannot be undone.</p>
                     <div class="flex items-center justify-center gap-3">
                         <button type="button" onclick="closeModal('deleteIncomeModal')"

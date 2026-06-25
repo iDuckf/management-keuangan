@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name'); // Nama kategori: Gaji, Makanan, Investasi
             $table->string('slug'); // Untuk URL friendly (gaji, makanan, investasi)
             $table->unique(['user_id', 'slug']);
-            $table->enum('type', ['income', 'expense']); // Membedakan kategori pemasukan / pengeluaran
+            $table->string('type');
             $table->string('color', 7)->nullable(); // Kode warna hex untuk grafik (contoh: #4e73df)
             $table->timestamps();
         });

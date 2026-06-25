@@ -32,10 +32,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/logout', [AuthContoller::class, 'logout'])->name('logout');
     Route::get('/incomes', [AdminController::class, 'incomesShow'])->name('incomes-show');
-    Route::get('/categories', [AdminController::class, 'categoriesShow'])->name('categories-show');
+    Route::get('/categories', [AdminController::class, 'categoryShow'])->name('categories-show');
     Route::get('/expenses', [AdminController::class, 'expensesShow'])->name('expenses-show');
 
+    // Incomes Routes
     Route::post('/incomes', [AdminController::class, 'incomeSave'])->name('incomes-save');
     Route::put('/incomes/{income:id}', [AdminController::class, 'incomeEdit'])->name('income-edit');
     Route::delete('/incomes/{income:id}', [AdminController::class, 'incomeDelete'])->name('income-delete');
+
+    // Expenses Routes
+
+    //Categories Routes
+    Route::post('/categories', [AdminController::class, 'categorySave'])->name('category-save');
+    Route::put('/categories/{category:id}', [AdminController::class, 'categoryEdit'])->name('category-edit');
+    Route::delete('/categories/{category:id}', [AdminController::class, 'categoryDelete'])->name('category-delete');
 });

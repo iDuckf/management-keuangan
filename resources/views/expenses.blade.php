@@ -30,7 +30,7 @@
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Total Expenses</p>
-                        <p class="text-xl font-bold mt-0.5">Rp 299.000</p>
+                        <p class="text-xl font-bold mt-0.5">Rp. {{ number_format($totalExpenses, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">This Month</p>
-                        <p class="text-xl font-bold mt-0.5">Rp 299.000</p>
+                        <p class="text-xl font-bold mt-0.5">Rp. {{ number_format($totalThisMonth, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                     </div>
                     <div>
                         <p class="text-gray-400 text-sm">Total Entries</p>
-                        <p class="text-xl font-bold mt-0.5">3</p>
+                        <p class="text-xl font-bold mt-0.5">{{ $totalEntries }}</p>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-gray-800 bg-gray-900/50">
-                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">#</th>
+                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">No.</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Title</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Amount</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Date</th>
@@ -80,117 +80,55 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-800">
-                        <tr class="hover:bg-gray-800/50 transition duration-150">
-                            <td class="px-6 py-4 text-sm text-gray-400">1</td>
-                            <td class="px-6 py-4 text-sm font-medium">Lunch at Mario's</td>
-                            <td class="px-6 py-4 text-sm font-medium text-red-400">Rp 50.000</td>
-                            <td class="px-6 py-4 text-sm text-gray-400">2024-06-02</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-600/10 text-red-400 text-xs font-medium rounded-full">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
-                                    Food & Drinks
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-400">-</td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <button onclick="openEditModal(1)"
-                                        class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                    </button>
-                                    <button onclick="openDeleteModal(1)"
-                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-800/50 transition duration-150">
-                            <td class="px-6 py-4 text-sm text-gray-400">2</td>
-                            <td class="px-6 py-4 text-sm font-medium">Gas Station</td>
-                            <td class="px-6 py-4 text-sm font-medium text-red-400">Rp 100.000</td>
-                            <td class="px-6 py-4 text-sm text-gray-400">2024-06-03</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-600/10 text-purple-400 text-xs font-medium rounded-full">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
-                                    Transportation
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-400">Full tank</td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <button onclick="openEditModal(2)"
-                                        class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                    </button>
-                                    <button onclick="openDeleteModal(2)"
-                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-gray-800/50 transition duration-150">
-                            <td class="px-6 py-4 text-sm text-gray-400">3</td>
-                            <td class="px-6 py-4 text-sm font-medium">Netflix Subscription</td>
-                            <td class="px-6 py-4 text-sm font-medium text-red-400">Rp 149.000</td>
-                            <td class="px-6 py-4 text-sm text-gray-400">2024-06-05</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center gap-1.5 px-3 py-1 bg-pink-600/10 text-pink-400 text-xs font-medium rounded-full">
-                                    <span class="w-1.5 h-1.5 rounded-full bg-pink-400"></span>
-                                    Entertainment
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-400">Monthly subscription</td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <button onclick="openEditModal(3)"
-                                        class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Edit">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                    </button>
-                                    <button onclick="openDeleteModal(3)"
-                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-600/10 rounded-lg transition duration-200 cursor-pointer"
-                                        title="Delete">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach ($expenses as $expense)
+                            <tr class="hover:bg-gray-800/50 transition duration-150">
+                                <td class="px-6 py-4 text-sm text-gray-400">{{ $loop->iteration }}</td>
+                                <td class="px-6 py-4 text-sm font-medium">{{ $expense->title }}</td>
+                                <td class="px-6 py-4 text-sm font-medium text-red-400">Rp.
+                                    {{ number_format($expense->amount, 0, ',', '.') }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-400">{{ $expense->date->format('j F Y') }}</td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-600/10 text-red-400 text-xs font-medium rounded-full">
+                                        <span class="w-1.5 h-1.5 rounded-full"
+                                            style="background: {{ $expense->category->color }}"></span>
+                                        {{ $expense->category->name }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-400">
+                                    {{ Str::limit($expense->description, 50, '...') }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <button
+                                            onclick='openEditModal({{ $expense->id }}, @json($expense))'
+                                            class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition duration-200 cursor-pointer"
+                                            title="Edit">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                        <button onclick="openDeleteModal({{ $expense->id }})"
+                                            class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-600/10 rounded-lg transition duration-200 cursor-pointer"
+                                            title="Delete">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    {{ $expenses->links() }}
 
     {{-- Add Expense Modal --}}
     <div id="addExpenseModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
@@ -207,37 +145,59 @@
                         </svg>
                     </button>
                 </div>
-                <form class="p-6 space-y-4">
+                <form class="p-6 space-y-4" method="POST" action="{{ route('expense-save') }}">
+                    @csrf
+                    @method('POST')
+
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Title</label>
                         <input type="text" name="title" placeholder="e.g. Groceries"
+                            value="{{ old('title') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('title')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Amount</label>
-                        <input type="number" name="amount" placeholder="0"
+                        <input type="number" name="amount" placeholder="0" value="{{ old('amount') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('amount')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
-                        <input type="date" name="date"
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        <input type="date" name="date" value="{{ old('date') }}"
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
+                        @error('date')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
                         <select name="category_id"
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
-                            <option value="" class="bg-gray-800">Select category</option>
-                            <option value="4" class="bg-gray-800">Food & Drinks</option>
-                            <option value="5" class="bg-gray-800">Transportation</option>
-                            <option value="6" class="bg-gray-800">Entertainment</option>
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
+                            @foreach ($categories as $category)
+                                @if ($category->type === Str::lower('Expense'))
+                                    <option value="{{ $category->id }}" class="bg-gray-800"
+                                        @selected(old('category_id') == $category->id)>{{ $category->name }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
+                        @error('category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
                         <textarea name="description" rows="2" placeholder="Add notes..."
-                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none"></textarea>
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none">{{ old('description') }}</textarea>
+                        @error('description')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <button type="button" onclick="closeModal('addExpenseModal')"
@@ -269,36 +229,60 @@
                         </svg>
                     </button>
                 </div>
-                <form class="p-6 space-y-4">
+                <form id="editExpenseForm" class="p-6 space-y-4" method="POST" action="">
+                    @csrf
+                    @method('PUT')
+
+                    <input type="hidden" id="edit_id" name="id">
+
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Title</label>
-                        <input type="text" name="title" value="Lunch at Mario's"
+                        <input type="text" name="edit_title" id="edit_title"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_title')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Amount</label>
-                        <input type="number" name="amount" value="50000"
+                        <input type="number" name="edit_amount" id="edit_amount"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_amount')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
-                        <input type="date" name="date" value="2024-06-02"
+                        <input type="date" name="edit_date" id="edit_date"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_date')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
-                        <select name="category_id"
+                        <select name="edit_category_id" id="edit_category_id"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
-                            <option value="4" selected class="bg-gray-800">Food & Drinks</option>
-                            <option value="5" class="bg-gray-800">Transportation</option>
-                            <option value="6" class="bg-gray-800">Entertainment</option>
+                            @foreach ($categories as $category)
+                                @if ($category->type === Str::lower('Expense'))
+                                    <option value="{{ $category->id }}" class="bg-gray-800"
+                                        @selected(old('edit_category_id') == $category->id)>{{ $category->name }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
+                        @error('edit_category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
-                        <textarea name="description" rows="2" placeholder="Add notes..."
+                        <textarea name="edit_description" rows="2" placeholder="Add notes..." id="edit_description"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none"></textarea>
+                        @error('edit_description')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <button type="button" onclick="closeModal('editExpenseModal')"
@@ -320,25 +304,31 @@
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('deleteExpenseModal')"></div>
         <div class="fixed inset-0 flex items-center justify-center p-4">
             <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-6 text-center">
-                <div class="mx-auto w-14 h-14 bg-red-600/10 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                    </svg>
-                </div>
-                <h2 class="text-lg font-bold mb-2">Delete Expense</h2>
-                <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this expense entry? This action
-                    cannot be undone.</p>
-                <div class="flex items-center justify-center gap-3">
-                    <button onclick="closeModal('deleteExpenseModal')"
-                        class="px-4 py-2.5 text-gray-400 hover:text-white font-medium rounded-xl transition duration-200 cursor-pointer">
-                        Cancel
-                    </button>
-                    <button onclick="closeModal('deleteExpenseModal')"
-                        class="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
-                        Delete
-                    </button>
-                </div>
+                <form method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <input type="hidden" name="id" id="delete_id">
+                    <div class="mx-auto w-14 h-14 bg-red-600/10 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-7 h-7 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold mb-2">Delete Expense</h2>
+                    <p class="text-gray-400 text-sm mb-6">Are you sure you want to delete this expense entry? This
+                        action
+                        cannot be undone.</p>
+                    <div class="flex items-center justify-center gap-3">
+                        <button type="button" onclick="closeModal('deleteExpenseModal')"
+                            class="px-4 py-2.5 text-gray-400 hover:text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                            class="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                            Delete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -352,23 +342,60 @@
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.body.style.overflow = '';
+
+            // Hapus error messages dari SEMUA modal
+            document.querySelectorAll('[role="dialog"] p.mt-1.text-xs.text-red-400')
+                .forEach(el => el.remove());
         }
 
-        function openEditModal(id) {
+        function openEditModal(id, data) {
+            // 1. Isi data ke elemen form modal edit
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_title').value = data.title;
+            document.getElementById('edit_amount').value = data.amount;
+
+            if (data.date) {
+                document.getElementById('edit_date').value = data.date.substring(0, 10);
+            }
+
+            document.getElementById('edit_category_id').value = data.category_id;
+            document.getElementById('edit_description').value = data.description || '';
+
+            // 2. Ubah action form secara dinamis (sesuaikan endpoint route Laravel-mu)
+            document.getElementById('editExpenseForm').action = `/expenses/${id}`;
+
+            // 3. Panggil fungsi openModal bawaanmu
             openModal('editExpenseModal');
         }
 
         function openDeleteModal(id) {
+            document.getElementById('delete_id').value = id;
+            document.querySelector('#deleteExpenseModal form').action = `/expenses/${id}`;
             openModal('deleteExpenseModal');
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('[role="dialog"]').forEach(el => {
-                    if (!el.classList.contains('hidden')) {
-                        closeModal(el.id);
-                    }
-                });
-            }
-        });
+
+        @if ($errors->hasAny(['title', 'amount', 'date', 'category_id']) && !old('id'))
+            document.addEventListener('DOMContentLoaded', function() {
+                openModal('addExpenseModal');
+            });
+        @endif
     </script>
+
+    @if (old('id'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const data = @json(old());
+                document.getElementById('edit_id').value = data.id;
+                document.getElementById('edit_title').value = data.edit_title || '';
+                document.getElementById('edit_amount').value = data.edit_amount || '';
+                if (data.edit_date) {
+                    document.getElementById('edit_date').value = data.edit_date.substring(0, 10);
+                }
+                document.getElementById('edit_category_id').value = data.edit_category_id || '';
+                document.getElementById('edit_description').value = data.edit_description || '';
+                document.getElementById('editExpenseForm').action = '/expenses/' + data.id;
+                openModal('editExpenseModal');
+            });
+        </script>
+    @endif
 </x-layout>

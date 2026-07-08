@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Expense;
 use App\Models\Income;
 use App\Models\User;
 use Carbon\Carbon;
@@ -65,20 +66,20 @@ class AdminController extends Controller
     public function incomeEdit(Request $request, Income $income)
     {
         $request->validate([
-            'source' => 'required|string|max:100',
-            'amount' => 'required|numeric',
-            'date' => 'required|date',
-            'category_id' => 'required|exists:categories,id',
-            'description' => 'string|nullable'
+            'edit_source' => 'required|string|max:100',
+            'edit_amount' => 'required|numeric',
+            'edit_date' => 'required|date',
+            'edit_category_id' => 'required|exists:categories,id',
+            'edit_description' => 'string|nullable'
         ]);
 
         $income->update([
-            'category_id' => $request->category_id,
+            'category_id' => $request->edit_category_id,
             'user_id' => session('id'),
-            'source' => $request->source,
-            'amount' => $request->amount,
-            'date' => $request->date,
-            'description' => $request->description
+            'source' => $request->edit_source,
+            'amount' => $request->edit_amount,
+            'date' => $request->edit_date,
+            'description' => $request->edit_description
         ]);
 
         return redirect()->route('incomes-show')->with('success', 'Perubahan income kamu berhasil disimpan!');
@@ -125,16 +126,16 @@ class AdminController extends Controller
     public function categoryEdit(Request $request, Category $category)
     {
         $request->validate([
-            'name' => 'required|string|max:100',
-            'type' => 'required|string|max:100',
-            'color_hex' => 'required|string'
+            'edit_name' => 'required|string|max:100',
+            'edit_type' => 'required|string|max:100',
+            'edit_color_hex' => 'required|string'
         ]);
 
         $category->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-            'type' => Str::lower($request->type),
-            'color' => $request->color_hex
+            'name' => $request->edit_name,
+            'slug' => Str::slug($request->edit_name),
+            'type' => Str::lower($request->edit_type),
+            'color' => $request->edit_color_hex
         ]);
 
         return redirect()->route('categories-show')->with('success', 'Category berhasil diperbarui!');
@@ -149,8 +150,72 @@ class AdminController extends Controller
     // EXPENSES
     public function expensesShow()
     {
+        $user = User::where('email', session('email'))->first();
+
+        $expenses = $user->expenses;
+        $categories = $user->categories;
+        $expensesThisMonth = $user->expenses()->whereMonth('date', Carbon::now()->month)->whereYear('date', Carbon::now()->year)->get();
+        $totalExpenses = $expenses->sum('amount');
+        $totalExpensesThisMonth = $expensesThisMonth->sum('amount');
+        $jumlahRowExpenses = $expenses->count();
+
         return view('expenses', [
             'title' => 'Expenses',
+            'totalExpenses' => $totalExpenses,
+            'totalThisMonth' => $totalExpensesThisMonth,
+            'totalEntries' => $jumlahRowExpenses,
+            'expenses' => $user->expenses()->paginate(10),
+            'categories' => $categories
         ]);
+    }
+
+    public function expenseSave(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'amount' => 'required|numeric',
+            'date' => 'required|date',
+            'category_id' => 'required|exists:categories,id',
+            'description' => 'string|nullable'
+        ]);
+
+        Expense::create([
+            'category_id' => $request->category_id,
+            'user_id' => session('id'),
+            'title' => $request->title,
+            'amount' => $request->amount,
+            'date' => $request->date,
+            'description' => $request->description
+        ]);
+
+        return redirect()->route('expenses-show')->with('success', 'Expense baru kamu berhasil disimpan!');
+    }
+
+    public function expenseEdit(Request $request, Expense $expense)
+    {
+        $request->validate([
+            'edit_title' => 'required|string|max:100',
+            'edit_amount' => 'required|numeric',
+            'edit_date' => 'required|date',
+            'edit_category_id' => 'required|exists:categories,id',
+            'edit_description' => 'string|nullable'
+        ]);
+
+        $expense->update([
+            'category_id' => $request->edit_category_id,
+            'user_id' => session('id'),
+            'title' => $request->edit_title,
+            'amount' => $request->edit_amount,
+            'date' => $request->edit_date,
+            'description' => $request->edit_description
+        ]);
+
+        return redirect()->route('expenses-show')->with('success', 'Perubahan income kamu berhasil disimpan!');
+    }
+
+    public function expenseDelete(Expense $expense)
+    {
+        $expense->delete();
+        return redirect()->route('expenses-show')->with('success', 'Expense berhasil dihapus!');
     }
 }

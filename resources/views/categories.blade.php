@@ -122,13 +122,19 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Name</label>
-                        <input type="text" name="name" placeholder="e.g. Groceries"
+                        <input type="text" name="name" placeholder="e.g. Groceries" value="{{ old('name') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Type</label>
-                        <input type="text" name="type" placeholder="e.g. groceries"
+                        <input type="text" name="type" placeholder="Ex : Income" value="{{ old('type') }}"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('type')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Color</label>
@@ -138,6 +144,9 @@
                                 class="w-10 h-10 rounded-lg border border-gray-700 bg-gray-800 cursor-pointer">
                             <input type="text" name="color_hex" value="#10b981"
                                 class="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 font-mono">
+                            @error('color_hex')
+                                <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
@@ -178,22 +187,31 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Name</label>
-                        <input type="text" name="name" id="edit_name"
+                        <input type="text" name="edit_name" id="edit_name"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_name')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Type</label>
-                        <input type="text" name="type" id="edit_type" placeholder="e.g. groceries"
+                        <input type="text" name="edit_type" id="edit_type" placeholder="e.g. groceries"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_type')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Color</label>
                         <div class="flex items-center gap-3">
-                            <input type="color" name="color" id="edit_color" value="#10b981"
+                            <input type="color" name="edit_color" id="edit_color" value="#10b981"
                                 oninput="document.getElementById('edit_color_hex').value = this.value"
                                 class="w-10 h-10 rounded-lg border border-gray-700 bg-gray-800 cursor-pointer">
-                            <input type="text" name="color_hex" id="edit_color_hex" value="#10b981"
+                            <input type="text" name="edit_color_hex" id="edit_color_hex" value="#10b981"
                                 class="flex-1 px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 font-mono">
+                            @error('edit_color_hex')
+                                <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
@@ -253,11 +271,11 @@
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.body.style.overflow = '';
-        }
 
-        // function openEditModal(id) {
-        //     openModal('editCategoryModal');
-        // }
+            // Hapus error messages dari SEMUA modal
+            document.querySelectorAll('[role="dialog"] p.mt-1.text-xs.text-red-400')
+                .forEach(el => el.remove());
+        }
 
         function openEditModal(id, data) {
             document.getElementById('edit_id').value = id;
@@ -276,14 +294,27 @@
             document.querySelector('#deleteCategoryModal form').action = `/categories/${id}`;
             openModal('deleteCategoryModal');
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('[role="dialog"]').forEach(el => {
-                    if (!el.classList.contains('hidden')) {
-                        closeModal(el.id);
-                    }
-                });
-            }
-        });
+
+        @if ($errors->hasAny(['name', 'type', 'color', 'color_hex']) && !old('id'))
+            document.addEventListener('DOMContentLoaded', function() {
+                openModal('addCategoryModal');
+            });
+        @endif
     </script>
+
+    @if (old('id'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const data = @json(old());
+                document.getElementById('edit_id').value = data.id;
+                document.getElementById('edit_name').value = data.edit_name || '';
+                document.getElementById('edit_type').value = data.edit_type || '';
+                document.getElementById('edit_color').value = data.edit_color || '';
+                document.getElementById('edit_color_hex').value = data.edit_color_hex || '';
+
+                document.getElementById('editCategoryForm').action = '/categories/' + data.id;
+                openModal('editCategoryModal');
+            });
+        </script>
+    @endif
 </x-layout>

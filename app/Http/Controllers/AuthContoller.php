@@ -33,7 +33,8 @@ class AuthContoller extends Controller
 
             session([
                 'id' => $user->id,
-                'email' => $user->email,
+                'username' => $user->username,
+                'email' => $user->email
             ]);
 
             return redirect()->intended('/dashboard');

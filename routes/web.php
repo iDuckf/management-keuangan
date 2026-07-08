@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/incomes/{income:id}', [AdminController::class, 'incomeDelete'])->name('income-delete');
 
     // Expenses Routes
+    Route::post('/expenses', [AdminController::class, 'expenseSave'])->name('expense-save');
+    Route::put('/expenses/{expense:id}', [AdminController::class, 'expenseEdit'])->name('expense-edit');
+    Route::delete('/expenses/{expense:id}', [AdminController::class, 'expenseDelete'])->name('expense-delete');
 
     //Categories Routes
     Route::post('/categories', [AdminController::class, 'categorySave'])->name('category-save');

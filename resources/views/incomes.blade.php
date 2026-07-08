@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="space-y-6" x-data="{ modal: null, editData: null }">
+    <div class="space-y-6">
         {{-- Header --}}
         <div class="flex items-center justify-between">
             <div>
@@ -70,7 +70,7 @@
                 <table class="w-full">
                     <thead>
                         <tr class="border-b border-gray-800 bg-gray-900/50">
-                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">#</th>
+                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">No.</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Source</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Amount</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Date</th>
@@ -90,7 +90,8 @@
                                 <td class="px-6 py-4">
                                     <span
                                         class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600/10 text-emerald-400 text-xs font-medium rounded-full">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        <span class="w-1.5 h-1.5 rounded-full"
+                                            style="background: {{ $income->category->color }}"></span>
                                         {{ $income->category->name }}
                                     </span>
                                 </td>
@@ -177,7 +178,6 @@
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
                         <select name="category_id"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
-                            <option value="" class="bg-gray-800">Select category</option>
                             @foreach ($categories as $category)
                                 @if ($category->type === Str::lower('Income'))
                                     <option value="{{ $category->id }}" class="bg-gray-800"
@@ -237,38 +237,52 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Source</label>
-                        <input type="text" name="source" id="edit_source"
+                        <input type="text" name="edit_source" id="edit_source"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_source')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Amount</label>
-                        <input type="number" name="amount" id="edit_amount"
+                        <input type="number" name="edit_amount" id="edit_amount"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_amount')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Date</label>
-                        <input type="date" name="date" id="edit_date"
+                        <input type="date" name="edit_date" id="edit_date"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                        @error('edit_date')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
-                        <select name="category_id" id="edit_category_id"
+                        <select name="edit_category_id" id="edit_category_id"
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
-                            <option value="" class="bg-gray-800">Select category</option>
                             @foreach ($categories as $category)
-                                @if ($category->type === 'income')
+                                @if ($category->type === Str::lower('Income'))
                                     <option value="{{ $category->id }}" class="bg-gray-800"
-                                        @selected(old('category_id') == $category->id)>{{ $category->name }}
+                                        @selected(old('edit_category_id') == $category->id)>{{ $category->name }}
                                     </option>
                                 @endif
                             @endforeach
                         </select>
+                        @error('edit_category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
-                        <textarea name="description" id="edit_description" rows="2" placeholder="Add notes..."
+                        <textarea name="edit_description" id="edit_description" rows="2" placeholder="Add notes..."
                             class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 resize-none"></textarea>
+                        @error('edit_description')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="flex items-center justify-end gap-3 pt-2">
                         <button type="button" onclick="closeModal('editIncomeModal')"
@@ -328,6 +342,10 @@
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.body.style.overflow = '';
+
+            // Hapus error messages dari SEMUA modal
+            document.querySelectorAll('[role="dialog"] p.mt-1.text-xs.text-red-400')
+                .forEach(el => el.remove());
         }
 
         function openEditModal(id, data) {
@@ -355,20 +373,29 @@
             document.querySelector('#deleteIncomeModal form').action = `/incomes/${id}`;
             openModal('deleteIncomeModal');
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('[role="dialog"]').forEach(el => {
-                    if (!el.classList.contains('hidden')) {
-                        closeModal(el.id);
-                    }
-                });
-            }
-        });
 
-        @if ($errors->hasAny(['source', 'amount', 'date', 'category_id']))
+        @if ($errors->hasAny(['source', 'amount', 'date', 'category_id']) && !old('id'))
             document.addEventListener('DOMContentLoaded', function() {
                 openModal('addIncomeModal');
             });
         @endif
     </script>
+
+    @if (old('id'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const data = @json(old());
+                document.getElementById('edit_id').value = data.id;
+                document.getElementById('edit_source').value = data.edit_source || '';
+                document.getElementById('edit_amount').value = data.edit_amount || '';
+                if (data.edit_date) {
+                    document.getElementById('edit_date').value = data.edit_date.substring(0, 10);
+                }
+                document.getElementById('edit_category_id').value = data.edit_category_id || '';
+                document.getElementById('edit_description').value = data.edit_description || '';
+                document.getElementById('editIncomeForm').action = '/incomes/' + data.id;
+                openModal('editIncomeModal');
+            });
+        </script>
+    @endif
 </x-layout>

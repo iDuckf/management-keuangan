@@ -11,10 +11,10 @@
 
 <body class="bg-gray-950 text-white font-sans antialiased">
 
-    <div class="min-h-screen flex">
+    <div class="h-screen flex overflow-hidden">
 
         {{-- Sidebar --}}
-        <aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col">
+        <aside class="fixed inset-y-0 left-0 w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-40">
             {{-- Logo --}}
             <div class="flex items-center gap-3 px-6 h-16 border-b border-gray-800">
                 <span class="text-2xl">💰</span>
@@ -58,6 +58,15 @@
                     </svg>
                     Category
                 </a>
+
+                <a href="{{ route('balances-show') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition duration-200 {{ request()->routeIs('balances-show') ? 'bg-emerald-600/20 text-emerald-400' : 'text-gray-400 hover:text-white hover:bg-gray-800' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7zm0 0V5a2 2 0 012-2h4l2 2h4a2 2 0 012 2v2" />
+                    </svg>
+                    Balances
+                </a>
             </nav>
 
             {{-- Logout --}}
@@ -77,7 +86,7 @@
         </aside>
 
         {{-- Main Content --}}
-        <main class="flex-1 p-8">
+        <main class="flex-1 ml-64 p-8 overflow-y-auto">
             @if (session('success'))
                 <div id="flash-success"
                     class="mb-6 px-4 py-3 bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 rounded-xl">

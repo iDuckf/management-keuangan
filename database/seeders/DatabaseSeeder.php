@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Balance;
 use App\Models\Category;
 use App\Models\Expense;
 use App\Models\Income;
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory(10)->create();
+        Balance::factory(5)->create();
         Category::factory(10)->create();
         Income::factory(5)->create();
         Expense::factory(5)->create();

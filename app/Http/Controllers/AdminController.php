@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balance;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -68,6 +69,19 @@ class AdminController extends Controller
             'totalEntries' => $jumlahRowExpenses,
             'expenses' => $user->expenses()->paginate(10),
             'categories' => $categories
+        ]);
+    }
+
+    // BALANCES
+    public function balancesShow()
+    {
+        $balances = Balance::all();
+        $totalBalance = $balances->sum('amount');
+
+        return view('balances', [
+            'title' => 'Balances',
+            'totalBalance' => $totalBalance,
+            'balances' => $balances
         ]);
     }
 }

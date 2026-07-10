@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthContoller;
+use App\Http\Controllers\BalanceController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\IncomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthContoller::class, 'index'])->name('login');
@@ -34,19 +38,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/incomes', [AdminController::class, 'incomesShow'])->name('incomes-show');
     Route::get('/categories', [AdminController::class, 'categoryShow'])->name('categories-show');
     Route::get('/expenses', [AdminController::class, 'expensesShow'])->name('expenses-show');
+    Route::get('/balances', [AdminController::class, 'balancesShow'])->name('balances-show');
 
     // Incomes Routes
-    Route::post('/incomes', [AdminController::class, 'incomeSave'])->name('incomes-save');
-    Route::put('/incomes/{income:id}', [AdminController::class, 'incomeEdit'])->name('income-edit');
-    Route::delete('/incomes/{income:id}', [AdminController::class, 'incomeDelete'])->name('income-delete');
+    Route::post('/incomes', [IncomeController::class, 'incomeSave'])->name('incomes-save');
+    Route::put('/incomes/{income:id}', [IncomeController::class, 'incomeEdit'])->name('income-edit');
+    Route::delete('/incomes/{income:id}', [IncomeController::class, 'incomeDelete'])->name('income-delete');
 
     // Expenses Routes
-    Route::post('/expenses', [AdminController::class, 'expenseSave'])->name('expense-save');
-    Route::put('/expenses/{expense:id}', [AdminController::class, 'expenseEdit'])->name('expense-edit');
-    Route::delete('/expenses/{expense:id}', [AdminController::class, 'expenseDelete'])->name('expense-delete');
+    Route::post('/expenses', [ExpenseController::class, 'expenseSave'])->name('expense-save');
+    Route::put('/expenses/{expense:id}', [ExpenseController::class, 'expenseEdit'])->name('expense-edit');
+    Route::delete('/expenses/{expense:id}', [ExpenseController::class, 'expenseDelete'])->name('expense-delete');
 
     //Categories Routes
-    Route::post('/categories', [AdminController::class, 'categorySave'])->name('category-save');
-    Route::put('/categories/{category:id}', [AdminController::class, 'categoryEdit'])->name('category-edit');
-    Route::delete('/categories/{category:id}', [AdminController::class, 'categoryDelete'])->name('category-delete');
+    Route::post('/categories', [CategoryController::class, 'categorySave'])->name('category-save');
+    Route::put('/categories/{category:id}', [CategoryController::class, 'categoryEdit'])->name('category-edit');
+    Route::delete('/categories/{category:id}', [CategoryController::class, 'categoryDelete'])->name('category-delete');
+
+    //Balances Routes
+    Route::post('/balances', [BalanceController::class, 'balanceSave'])->name('balances-save');
+    Route::put('/balances/{balance:id}', [BalanceController::class, 'balanceEdit'])->name('balances-edit');
+    Route::delete('/balances/{balance:id}', [BalanceController::class, 'balanceDelete'])->name('balances-delete');
 });

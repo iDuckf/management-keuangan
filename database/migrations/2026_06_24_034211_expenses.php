@@ -18,6 +18,10 @@ return new class extends Migration
                 table: 'users',
                 indexName: 'expenses_user_id'
             )->cascadeOnDelete(); // Relasi ke table users
+            $table->foreignId('balance_id')->constrained(
+                table: 'balances',
+                indexName: 'expenses_balance_id'
+            )->cascadeOnDelete();
             $table->string('title'); // Contoh: Bayar Kos, Makan Siang
             $table->decimal('amount', 15, 2); // Nominal pengeluaran
             $table->date('date'); // Tanggal pengeluaran

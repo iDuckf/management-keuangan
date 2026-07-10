@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Balance;
 use App\Models\Income;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -26,6 +27,7 @@ class IncomeFactory extends Factory
         return [
             'category_id' => Arr::random($category_id),
             'user_id' => Arr::random($user_id),
+            'balance_id' => Balance::factory(),
             'source' => Arr::random($sources),
             'amount' => Arr::random($amounts),
             'date' => now(),

@@ -11,7 +11,7 @@ class Expense extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = ['category_id', 'user_id', 'title', 'amount', 'date', 'description'];
+    protected $fillable = ['category_id', 'user_id', 'balance_id', 'title', 'amount', 'date', 'description'];
 
     public function user(): BelongsTo
     {
@@ -21,6 +21,11 @@ class Expense extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function balance(): BelongsTo
+    {
+        return $this->belongsTo(Balance::class);
     }
 
     protected function casts(): array

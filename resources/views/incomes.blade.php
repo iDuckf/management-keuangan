@@ -75,6 +75,7 @@
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Amount</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Date</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Category</th>
+                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Source</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Description</th>
                             <th class="text-right px-6 py-4 text-gray-400 text-sm font-medium">Actions</th>
                         </tr>
@@ -93,6 +94,12 @@
                                         <span class="w-1.5 h-1.5 rounded-full"
                                             style="background: {{ $income->category->color }}"></span>
                                         {{ $income->category->name }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-600/10 text-yellow-400 text-xs font-medium rounded-full">
+                                        {{ $income->balance->name }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-400">
@@ -191,6 +198,20 @@
                         @enderror
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Source</label>
+                        <select name="balance_id"
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200 hover:cursor-pointer">
+                            @foreach ($balances as $balance)
+                                <option value="{{ $balance->id }}" class="bg-gray-800" @selected(old('balance_id') == $balance->id)>
+                                    {{ $balance->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1.5">Description <span
                                 class="text-gray-500">(optional)</span></label>
                         <textarea name="description" rows="2" placeholder="Add notes..."
@@ -272,6 +293,20 @@
                             @endforeach
                         </select>
                         @error('edit_category_id')
+                            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1.5">Category</label>
+                        <select name="edit_balance_id" id="edit_balance_id"
+                            class="w-full px-4 py-2.5 bg-gray-800 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition duration-200">
+                            @foreach ($balances as $balance)
+                                <option value="{{ $balance->id }}" class="bg-gray-800" @selected(old('edit_balance_id') == $balance->id)>
+                                    {{ $balance->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('edit_balance_id')
                             <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
@@ -359,6 +394,7 @@
             }
 
             document.getElementById('edit_category_id').value = data.category_id;
+            document.getElementById('edit_balance_id').value = data.balance_id;
             document.getElementById('edit_description').value = data.description || '';
 
             // 2. Ubah action form secara dinamis (sesuaikan endpoint route Laravel-mu)
@@ -392,6 +428,7 @@
                     document.getElementById('edit_date').value = data.edit_date.substring(0, 10);
                 }
                 document.getElementById('edit_category_id').value = data.edit_category_id || '';
+                document.getElementById('edit_balance_id').value = data.edit_balance_id || '';
                 document.getElementById('edit_description').value = data.edit_description || '';
                 document.getElementById('editIncomeForm').action = '/incomes/' + data.id;
                 openModal('editIncomeModal');

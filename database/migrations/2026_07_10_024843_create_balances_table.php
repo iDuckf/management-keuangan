@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('balances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained(
+                table: 'users',
+                indexName: 'balances_user_id'
+            )->cascadeOnDelete();
             $table->string('name');
             $table->string('tipe');
             $table->decimal('amount', 15, 2);

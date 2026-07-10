@@ -22,6 +22,7 @@ class AdminController extends Controller
 
         $incomes = $user->incomes;
         $categories = $user->categories;
+        $balances = $user->balances;
         $incomesThisMonth = $user->incomes()->whereMonth('date', Carbon::now()->month)->whereYear('date', Carbon::now()->year)->get();
         $totalIncomes = $incomes->sum('amount');
         $totalIncomesThisMonth = $incomesThisMonth->sum('amount');
@@ -33,7 +34,8 @@ class AdminController extends Controller
             'totalThisMonth' => $totalIncomesThisMonth,
             'totalEntries' => $jumlahRowIncomes,
             'incomes' => $user->incomes()->paginate(10),
-            'categories' => $categories
+            'categories' => $categories,
+            'balances' => $balances
         ]);
     }
 
@@ -57,6 +59,7 @@ class AdminController extends Controller
 
         $expenses = $user->expenses;
         $categories = $user->categories;
+        $balances = $user->balances;
         $expensesThisMonth = $user->expenses()->whereMonth('date', Carbon::now()->month)->whereYear('date', Carbon::now()->year)->get();
         $totalExpenses = $expenses->sum('amount');
         $totalExpensesThisMonth = $expensesThisMonth->sum('amount');
@@ -68,14 +71,17 @@ class AdminController extends Controller
             'totalThisMonth' => $totalExpensesThisMonth,
             'totalEntries' => $jumlahRowExpenses,
             'expenses' => $user->expenses()->paginate(10),
-            'categories' => $categories
+            'categories' => $categories,
+            'balances' => $balances
         ]);
     }
 
     // BALANCES
     public function balancesShow()
     {
-        $balances = Balance::all();
+        $user = User::where('email', session('email'))->first();
+
+        $balances = $user->balances;
         $totalBalance = $balances->sum('amount');
 
         return view('balances', [

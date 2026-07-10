@@ -17,6 +17,7 @@ class BalanceController extends Controller
         ]);
 
         Balance::create([
+            'user_id' => session('id'),
             'name' => $request->name,
             'tipe' => Str::lower($request->tipe),
             'amount' => $request->amount

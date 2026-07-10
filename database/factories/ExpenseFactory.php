@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Balance;
 use App\Models\Expense;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
@@ -26,6 +27,7 @@ class ExpenseFactory extends Factory
         return [
             'category_id' => Arr::random($category_id),
             'user_id' => Arr::random($user_id),
+            'balance_id' => Balance::factory(),
             'title' => Arr::random($titles),
             'amount' => Arr::random($amounts),
             'date' => now(),

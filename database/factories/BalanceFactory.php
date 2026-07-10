@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Balance;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 
@@ -21,6 +22,7 @@ class BalanceFactory extends Factory
         $types = ['cash', 'ewallet', 'bank'];
 
         return [
+            'user_id' => User::factory(),
             'name' => fake()->name(),
             'tipe' => Arr::random($types),
             'amount' => fake()->numberBetween(1000000, 3000000)

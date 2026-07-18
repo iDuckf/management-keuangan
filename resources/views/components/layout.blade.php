@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('static/img/favicon.ico') }}">
+    <!-- Load CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite('resources/css/app.css')
     <title>MyMoney | {{ $title }}</title>
 </head>

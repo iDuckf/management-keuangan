@@ -2,16 +2,71 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Balance;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
+        $user = User::where('email', session('email'))->first();
+        $year = $request->input('year', Carbon::now()->year);
+
+        $allIncomes = $user->incomes()->get();
+        $allExpenses = $user->expenses()->get();
+
+        $years = $allIncomes->pluck('date')->merge($allExpenses->pluck('date'))
+            ->map(fn($d) => Carbon::parse($d)->year)
+            ->unique()->sortDesc()->values();
+
+
+        $incomesThisMonth = $user->incomes()->whereMonth('date', Carbon::now()->month)->whereYear('date', $request->year ?? $year)->get();
+        $expensesThisMonth = $user->expenses()->whereMonth('date', Carbon::now()->month)->whereYear('date', $request->year ?? $year)->get();
+        $totalBalances = $user->balances->sum('amount');
+
+        $monthlyIncomesChart = $user->incomes()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($i) => $i->date->month)->map(fn($g) => $g->sum('amount'));
+
+        $monthlyExpensesChart = $user->expenses()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($e) => $e->date->month)->map(fn($g) => $g->sum('amount'));
+
+        $incomeDataChart = [];
+        $expenseDataChart = [];
+
+        for ($m = 1; $m <= 12; $m++) {
+            $incomeDataChart[] = $monthlyIncomesChart->get($m, 0);
+            $expenseDataChart[] = $monthlyExpensesChart->get($m, 0);
+        }
+
+        $expensesByCategory = $user->expenses()->with('category')->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($e) => $e->category?->name ?? 'Lainnya')->map(fn($g) => [
+            'total' => $g->sum('amount'),
+            'color' => $g->first()->category?->color ?? '#6b7280'
+        ]);
+
+        $donutLabels = $expensesByCategory->keys()->values();
+        $donutDatas = $expensesByCategory->pluck('total')->values();
+        $donutColors = $expensesByCategory->pluck('color')->values();
+
+        $groupedBalances = $user->balances()->get()->groupBy(fn($b) => $b->tipe ?? 'Kosong')->map(fn($g) => [
+            'total' => $g->sum('amount')
+        ]);
+
         return view('dashboard', [
             'title' => 'Dashboard',
+            'totalIncomesMonth' => $incomesThisMonth->sum('amount'),
+            'totalIncomesEntries' => $incomesThisMonth->count(),
+            'totalExpensesMonth' => $expensesThisMonth->sum('amount'),
+            'totalExpensesEntries' => $expensesThisMonth->count(),
+            'totalBalances' => $totalBalances,
+            'selectedYear' => (int) $year,
+            'incomeDataChart' => $incomeDataChart,
+            'expenseDataChart' => $expenseDataChart,
+            'donutLabels' => $donutLabels,
+            'donutDatas' => $donutDatas,
+            'donutColors' => $donutColors,
+            'groupedBalances' => $groupedBalances,
+            'newestIncomes' => $user->incomes()->orderByDesc('date')->latest()->take(5)->get(),
+            'newestExpenses' => $user->expenses()->orderByDesc('date')->latest()->take(5)->get(),
+            'years' => $years
         ]);
     }
 
@@ -35,7 +90,7 @@ class AdminController extends Controller
             'totalEntries' => $jumlahRowIncomes,
             'incomes' => $user->incomes()->paginate(10),
             'categories' => $categories,
-            'balances' => $balances
+            'balances' => $balances,
         ]);
     }
 
@@ -48,7 +103,7 @@ class AdminController extends Controller
 
         return view('categories', [
             'title' => 'Categories',
-            'groupedCategories' => $groupedCategories
+            'groupedCategories' => $groupedCategories,
         ]);
     }
 
@@ -72,7 +127,7 @@ class AdminController extends Controller
             'totalEntries' => $jumlahRowExpenses,
             'expenses' => $user->expenses()->paginate(10),
             'categories' => $categories,
-            'balances' => $balances
+            'balances' => $balances,
         ]);
     }
 
@@ -87,7 +142,7 @@ class AdminController extends Controller
         return view('balances', [
             'title' => 'Balances',
             'totalBalance' => $totalBalance,
-            'balances' => $balances
+            'balances' => $balances,
         ]);
     }
 }

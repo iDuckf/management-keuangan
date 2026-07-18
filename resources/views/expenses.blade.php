@@ -71,7 +71,7 @@
                     <thead>
                         <tr class="border-b border-gray-800 bg-gray-900/50">
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">No.</th>
-                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Title</th>
+                            <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Name</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Amount</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Date</th>
                             <th class="text-left px-6 py-4 text-gray-400 text-sm font-medium">Category</th>
@@ -81,7 +81,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-800">
-                        @foreach ($expenses as $expense)
+                        @forelse ($expenses as $expense)
                             <tr class="hover:bg-gray-800/50 transition duration-150">
                                 <td class="px-6 py-4 text-sm text-gray-400">{{ $loop->iteration }}</td>
                                 <td class="px-6 py-4 text-sm font-medium">{{ $expense->title }}</td>
@@ -128,7 +128,12 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="8" class="px-6 py-8 text-center text-gray-500 text-sm">Anda Belum
+                                    Membuat Data Expenses</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

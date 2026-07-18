@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained(
                 table: 'users',
                 indexName: 'categories_user_id'
-            )->cascadeOnDelete(); // Relasi ke table users  
+            )->cascadeOnDelete(); // Relasi ke table users
             $table->string('name'); // Nama kategori: Gaji, Makanan, Investasi
             $table->string('slug'); // Untuk URL friendly (gaji, makanan, investasi)
             $table->unique(['user_id', 'slug']);

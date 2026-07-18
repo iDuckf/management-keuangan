@@ -31,7 +31,7 @@ class ExpenseFactory extends Factory
             'title' => Arr::random($titles),
             'amount' => Arr::random($amounts),
             'date' => now(),
-            'description' => fake()->text(200)
+            'description' => fake()->text(200),
         ];
     }
 }

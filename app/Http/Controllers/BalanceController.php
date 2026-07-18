@@ -13,14 +13,14 @@ class BalanceController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'tipe' => 'required|string|max:100',
-            'amount' => 'required|numeric'
+            'amount' => 'required|numeric',
         ]);
 
         Balance::create([
             'user_id' => session('id'),
             'name' => $request->name,
             'tipe' => Str::lower($request->tipe),
-            'amount' => $request->amount
+            'amount' => $request->amount,
         ]);
 
         return redirect()->route('balances-show')->with('success', 'Balance baru berhasil ditambahkan!');
@@ -31,13 +31,13 @@ class BalanceController extends Controller
         $request->validate([
             'edit_name' => 'required|string|max:100',
             'edit_tipe' => 'required|string|max:100',
-            'edit_amount' => 'required|numeric'
+            'edit_amount' => 'required|numeric',
         ]);
 
         $balance->update([
             'name' => $request->edit_name,
             'tipe' => Str::lower($request->edit_tipe),
-            'amount' => $request->edit_amount
+            'amount' => $request->edit_amount,
         ]);
 
         return redirect()->route('balances-show')->with('success', 'Balance berhasil diperbarui!');
@@ -46,6 +46,7 @@ class BalanceController extends Controller
     public function balanceDelete(Balance $balance)
     {
         $balance->delete();
+
         return redirect()->route('balances-show')->with('success', 'Balance berhasil dihapus!');
     }
 }

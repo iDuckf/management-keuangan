@@ -29,7 +29,7 @@ class CategoryFactory extends Factory
             'name' => $name,
             'slug' => Str::slug($name),
             'type' => Arr::random($types),
-            'color' => Arr::random($colors)
+            'color' => Arr::random($colors),
         ];
     }
 }

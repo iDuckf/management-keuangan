@@ -50,12 +50,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/expenses/{expense:id}', [ExpenseController::class, 'expenseEdit'])->name('expense-edit');
     Route::delete('/expenses/{expense:id}', [ExpenseController::class, 'expenseDelete'])->name('expense-delete');
 
-    //Categories Routes
+    // Categories Routes
     Route::post('/categories', [CategoryController::class, 'categorySave'])->name('category-save');
     Route::put('/categories/{category:id}', [CategoryController::class, 'categoryEdit'])->name('category-edit');
     Route::delete('/categories/{category:id}', [CategoryController::class, 'categoryDelete'])->name('category-delete');
 
-    //Balances Routes
+    // Balances Routes
     Route::post('/balances', [BalanceController::class, 'balanceSave'])->name('balances-save');
     Route::put('/balances/{balance:id}', [BalanceController::class, 'balanceEdit'])->name('balances-edit');
     Route::delete('/balances/{balance:id}', [BalanceController::class, 'balanceDelete'])->name('balances-delete');

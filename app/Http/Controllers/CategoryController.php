@@ -13,7 +13,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:100',
             'type' => 'required|string|max:100',
-            'color_hex' => 'required|string'
+            'color_hex' => 'required|string',
         ]);
 
         Category::create([
@@ -21,7 +21,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'slug' => Str::slug($request->name),
             'type' => Str::lower($request->type),
-            'color' => $request->color_hex
+            'color' => $request->color_hex,
         ]);
 
         return redirect()->route('categories-show')->with('success', 'Category baru berhasil ditambahkan!');
@@ -32,14 +32,14 @@ class CategoryController extends Controller
         $request->validate([
             'edit_name' => 'required|string|max:100',
             'edit_type' => 'required|string|max:100',
-            'edit_color_hex' => 'required|string'
+            'edit_color_hex' => 'required|string',
         ]);
 
         $category->update([
             'name' => $request->edit_name,
             'slug' => Str::slug($request->edit_name),
             'type' => Str::lower($request->edit_type),
-            'color' => $request->edit_color_hex
+            'color' => $request->edit_color_hex,
         ]);
 
         return redirect()->route('categories-show')->with('success', 'Category berhasil diperbarui!');
@@ -48,6 +48,7 @@ class CategoryController extends Controller
     public function categoryDelete(Category $category)
     {
         $category->delete();
+
         return redirect()->route('categories-show')->with('success', 'Category berhasil dihapus!');
     }
 }

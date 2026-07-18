@@ -31,7 +31,7 @@ class IncomeFactory extends Factory
             'source' => Arr::random($sources),
             'amount' => Arr::random($amounts),
             'date' => now(),
-            'description' => fake()->text(200)
+            'description' => fake()->text(200),
         ];
     }
 }

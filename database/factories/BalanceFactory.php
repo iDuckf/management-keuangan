@@ -25,7 +25,7 @@ class BalanceFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->name(),
             'tipe' => Arr::random($types),
-            'amount' => fake()->numberBetween(1000000, 3000000)
+            'amount' => fake()->numberBetween(1000000, 3000000),
         ];
     }
 }

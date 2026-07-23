@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset Password - MyMoney</title>
+    <title>Reset Password | MyMoney</title>
     <style>
         body {
             margin: 0;
@@ -11,6 +12,7 @@
             background-color: #030712;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         .container {
             max-width: 480px;
             margin: 40px auto;
@@ -19,6 +21,7 @@
             padding: 40px 32px;
             border: 1px solid #1f2937;
         }
+
         .logo {
             text-align: center;
             font-size: 32px;
@@ -26,12 +29,14 @@
             color: #ffffff;
             margin-bottom: 24px;
         }
+
         h1 {
             color: #ffffff;
             font-size: 20px;
             text-align: center;
             margin-bottom: 8px;
         }
+
         p {
             color: #9ca3af;
             font-size: 14px;
@@ -39,6 +44,7 @@
             text-align: center;
             margin-bottom: 24px;
         }
+
         .btn {
             display: block;
             width: fit-content;
@@ -51,9 +57,11 @@
             font-size: 14px;
             font-weight: 600;
         }
+
         .btn:hover {
             background: #10b981;
         }
+
         .footer {
             text-align: center;
             color: #6b7280;
@@ -62,6 +70,7 @@
             padding-top: 24px;
             border-top: 1px solid #1f2937;
         }
+
         .expiry {
             text-align: center;
             color: #6b7280;
@@ -70,13 +79,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="logo">MyMoney</div>
         <h1>Reset Password</h1>
         <p>Halo {{ $username }},<br>
-        Kami menerima permintaan reset password untuk akun MyMoney-mu.<br>
-        Klik tombol di bawah untuk membuat password baru.</p>
+            Kami menerima permintaan reset password untuk akun MyMoney-mu.<br>
+            Klik tombol di bawah untuk membuat password baru.</p>
 
         <a href="{{ $url }}" class="btn">Reset Password</a>
 
@@ -88,4 +98,5 @@
         </div>
     </div>
 </body>
+
 </html>

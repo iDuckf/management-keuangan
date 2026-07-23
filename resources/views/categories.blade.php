@@ -1,15 +1,15 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="space-y-6">
+    <div class="space-y-4 sm:space-y-6">
         {{-- Header --}}
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <h1 class="text-2xl font-bold">{{ $title }}</h1>
-                <p class="text-gray-400 mt-1">Organize your income and expense categories</p>
+                <h1 class="text-xl sm:text-2xl font-bold">{{ $title }}</h1>
+                <p class="text-gray-400 mt-1 text-sm">Organize your income and expense categories</p>
             </div>
             <button onclick="openModal('addCategoryModal')"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -19,7 +19,7 @@
         </div>
 
         {{-- Categories Grid --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             @forelse ($groupedCategories as $type => $categories)
                 {{-- Setiap ada 'type' baru di database, box div ini akan otomatis terbuat satu lagi --}}
                 <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition duration-150">
+                                    class="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition duration-150">
                                     <button onclick='openEditModal({{ $category->id }}, @json($category))'
                                         class="p-1.5 text-gray-400 hover:text-blue-400 hover:bg-blue-600/10 rounded-lg transition cursor-pointer">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor"
@@ -104,9 +104,9 @@
     {{-- Add Category Modal --}}
     <div id="addCategoryModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('addCategoryModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl">
-                <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-800">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-800">
                     <h2 class="text-lg font-bold">Add Category</h2>
                     <button onclick="closeModal('addCategoryModal')"
                         class="p-1 text-gray-400 hover:text-white transition cursor-pointer">
@@ -116,7 +116,7 @@
                         </svg>
                     </button>
                 </div>
-                <form class="p-6 space-y-4" action="{{ route('category-save') }}" method="POST">
+                <form class="p-4 sm:p-6 space-y-4" action="{{ route('category-save') }}" method="POST">
                     @csrf
                     @method('POST')
 
@@ -167,9 +167,9 @@
     {{-- Edit Category Modal --}}
     <div id="editCategoryModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('editCategoryModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl">
-                <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-800">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-800">
                     <h2 class="text-lg font-bold">Edit Category</h2>
                     <button onclick="closeModal('editCategoryModal')"
                         class="p-1 text-gray-400 hover:text-white transition cursor-pointer">
@@ -179,7 +179,7 @@
                         </svg>
                     </button>
                 </div>
-                <form id="editCategoryForm" class="p-6 space-y-4" method="POST" action="">
+                <form id="editCategoryForm" class="p-4 sm:p-6 space-y-4" method="POST" action="">
                     @csrf
                     @method('PUT')
 
@@ -232,8 +232,8 @@
     {{-- Delete Confirmation Modal --}}
     <div id="deleteCategoryModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('deleteCategoryModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-6 text-center">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-5 sm:p-6 text-center">
                 <form method="POST">
                     @csrf
                     @method('DELETE')

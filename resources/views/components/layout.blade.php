@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{{ asset('static/img/favicon.ico') }}">
-    <!-- Load CDN Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     @vite('resources/css/app.css')
     <title>MyMoney | {{ $title }}</title>
@@ -15,12 +14,24 @@
 
     <div class="h-screen flex overflow-hidden">
 
+        {{-- Mobile Overlay --}}
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-30 hidden md:hidden" onclick="toggleSidebar()"></div>
+
         {{-- Sidebar --}}
-        <aside class="fixed inset-y-0 left-0 w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-40">
+        <aside id="sidebar"
+            class="fixed inset-y-0 left-0 w-64 bg-gray-900 border-r border-gray-800 flex flex-col z-40 transition-transform duration-300 -translate-x-full md:translate-x-0">
+
             {{-- Logo --}}
-            <div class="flex items-center gap-3 px-6 h-16 border-b border-gray-800">
-                <span class="text-2xl">💰</span>
-                <span class="text-xl font-bold tracking-tight">MyMoney</span>
+            <div class="flex items-center justify-between px-6 h-16 border-b border-gray-800">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">💰</span>
+                    <span class="text-xl font-bold tracking-tight">MyMoney</span>
+                </div>
+                <button onclick="toggleSidebar()" class="md:hidden p-1 text-gray-400 hover:text-white transition cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
 
             {{-- Navigation --}}
@@ -88,27 +99,48 @@
         </aside>
 
         {{-- Main Content --}}
-        <main class="flex-1 ml-64 p-8 overflow-y-auto">
-            @if (session('success'))
-                <div id="flash-success"
-                    class="mb-6 px-4 py-3 bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 rounded-xl">
-                    {{ session('success') }}
-                </div>
+        <main class="flex-1 md:ml-64 overflow-y-auto">
+            {{-- Mobile Header --}}
+            <div class="md:hidden flex items-center gap-3 px-4 py-3 border-b border-gray-800 bg-gray-900/80 backdrop-blur-sm sticky top-0 z-20">
+                <button onclick="toggleSidebar()" class="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition cursor-pointer">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+                <span class="text-lg font-bold">MyMoney</span>
+            </div>
 
-                <script>
-                    setTimeout(() => {
-                        const el = document.getElementById('flash-success');
-                        if (el) {
-                            el.style.transition = 'opacity 0.5s ease';
-                            el.style.opacity = '0';
-                            setTimeout(() => el.remove(), 500);
-                        }
-                    }, 3500);
-                </script>
-            @endif
-            {{ $slot }}
+            <div class="p-4 sm:p-6 lg:p-8">
+                @if (session('success'))
+                    <div id="flash-success"
+                        class="mb-4 sm:mb-6 px-4 py-3 bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 rounded-xl text-sm">
+                        {{ session('success') }}
+                    </div>
+
+                    <script>
+                        setTimeout(() => {
+                            const el = document.getElementById('flash-success');
+                            if (el) {
+                                el.style.transition = 'opacity 0.5s ease';
+                                el.style.opacity = '0';
+                                setTimeout(() => el.remove(), 500);
+                            }
+                        }, 3500);
+                    </script>
+                @endif
+                {{ $slot }}
+            </div>
         </main>
     </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+    </script>
 
 </body>
 

@@ -1,15 +1,15 @@
 <x-layout>
     <x-slot:title>{{ $title }}</x-slot:title>
 
-    <div class="space-y-6">
+    <div class="space-y-4 sm:space-y-6">
         {{-- Header --}}
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-                <h1 class="text-2xl font-bold">{{ $title }}</h1>
-                <p class="text-gray-400 mt-1">Manage all your balance sources</p>
+                <h1 class="text-xl sm:text-2xl font-bold">{{ $title }}</h1>
+                <p class="text-gray-400 mt-1 text-sm">Manage all your balance sources</p>
             </div>
             <button onclick="openModal('addBalanceModal')"
-                class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
+                class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-xl transition duration-200 cursor-pointer">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -20,17 +20,17 @@
 
         {{-- Total Balance Summary --}}
         <div
-            class="bg-gradient-to-r from-emerald-600/20 via-emerald-500/10 to-transparent rounded-2xl p-6 border border-emerald-600/20">
-            <div class="flex items-center gap-4">
-                <div class="p-4 bg-emerald-600/10 rounded-2xl">
-                    <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            class="bg-gradient-to-r from-emerald-600/20 via-emerald-500/10 to-transparent rounded-2xl p-4 sm:p-6 border border-emerald-600/20">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="p-3 sm:p-4 bg-emerald-600/10 rounded-2xl">
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                 </div>
                 <div>
                     <p class="text-gray-400 text-sm">Total Balance</p>
-                    <p class="text-3xl font-bold text-emerald-400 mt-0.5">Rp.
+                    <p class="text-2xl sm:text-3xl font-bold text-emerald-400 mt-0.5">Rp.
                         {{ number_format($totalBalance, 0, ',', '.') }}</p>
                 </div>
             </div>
@@ -62,9 +62,9 @@
                     $items = $groupedBalances[$tipe];
                     $config = $typeConfig[$tipe] ?? ['icon' => 'bg-gray-600/10 text-gray-400', 'subtext' => 'text-gray-400'];
                 @endphp
-                <div class="bg-gray-900 rounded-2xl border border-gray-800 p-6">
+                <div class="bg-gray-900 rounded-2xl border border-gray-800 p-4 sm:p-6">
                     {{-- Group Header --}}
-                    <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-800">
+                    <div class="flex items-center gap-3 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-gray-800">
                         <div class="p-2 rounded-lg {{ $config['icon'] }}">
                             @if ($tipe === 'cash')
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@
                     </div>
 
                     {{-- ATM Cards Grid --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                         @foreach ($items as $balance)
                             @php
                                 $gradientClass = match ($balance->tipe) {
@@ -149,7 +149,7 @@
                                             <p class="text-white font-semibold text-sm tracking-wide">{{ $balance->name }}</p>
                                         </div>
                                         <div
-                                            class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                            class="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                                             <button onclick='openEditModal({{ $balance->id }}, @json($balance))'
                                                 class="p-2 text-white/70 hover:text-white hover:bg-white/20 rounded-lg transition duration-200 cursor-pointer"
                                                 title="Edit">
@@ -193,9 +193,9 @@
     {{-- Add Balance Modal --}}
     <div id="addBalanceModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('addBalanceModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl">
-                <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-800">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-800">
                     <h2 class="text-lg font-bold">Add Balance</h2>
                     <button onclick="closeModal('addBalanceModal')"
                         class="p-1 text-gray-400 hover:text-white transition cursor-pointer">
@@ -205,7 +205,7 @@
                         </svg>
                     </button>
                 </div>
-                <form class="p-6 space-y-4" method="POST" action="{{ route('balances-save') }}">
+                <form class="p-4 sm:p-6 space-y-4" method="POST" action="{{ route('balances-save') }}">
                     @csrf
                     @method('POST')
 
@@ -256,9 +256,9 @@
     {{-- Edit Balance Modal --}}
     <div id="editBalanceModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('editBalanceModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl">
-                <div class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-800">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-lg border border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-3 sm:pb-4 border-b border-gray-800">
                     <h2 class="text-lg font-bold">Edit Balance</h2>
                     <button onclick="closeModal('editBalanceModal')"
                         class="p-1 text-gray-400 hover:text-white transition cursor-pointer">
@@ -268,7 +268,7 @@
                         </svg>
                     </button>
                 </div>
-                <form id="editBalanceForm" class="p-6 space-y-4" method="POST" action="">
+                <form id="editBalanceForm" class="p-4 sm:p-6 space-y-4" method="POST" action="">
                     @csrf
                     @method('PUT')
 
@@ -320,8 +320,8 @@
     {{-- Delete Confirmation Modal --}}
     <div id="deleteBalanceModal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/60 backdrop-blur-sm" onclick="closeModal('deleteBalanceModal')"></div>
-        <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-6 text-center">
+        <div class="fixed inset-0 flex items-center justify-center p-3 sm:p-4">
+            <div class="bg-gray-900 rounded-2xl w-full max-w-md border border-gray-800 shadow-2xl p-5 sm:p-6 text-center">
                 <form method="POST">
                     @csrf
                     @method('DELETE')

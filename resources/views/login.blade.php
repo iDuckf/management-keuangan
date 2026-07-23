@@ -11,14 +11,14 @@
 
 <body class="bg-gray-950">
     <div class="min-h-screen flex">
-        <div class="flex-1 flex items-center justify-center px-6 py-12">
+        <div class="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
             <div class="w-full max-w-md">
-                <div class="text-center mb-10">
-                    <h1 class="text-4xl font-bold text-white tracking-tight">MyMoney</h1>
+                <div class="text-center mb-8 sm:mb-10">
+                    <h1 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">MyMoney</h1>
                     <p class="text-gray-400 mt-2 text-sm">Sign in to manage your finances</p>
                 </div>
 
-                <div class="bg-gray-900 rounded-2xl p-8 shadow-2xl border border-gray-800">
+                <div class="bg-gray-900 rounded-2xl p-6 sm:p-8 shadow-2xl border border-gray-800">
                     <form method="POST" action="{{ route('login.submit') }}">
                         @csrf
 

@@ -17,17 +17,16 @@ class AdminController extends Controller
         $allExpenses = $user->expenses()->get();
 
         $years = $allIncomes->pluck('date')->merge($allExpenses->pluck('date'))
-            ->map(fn($d) => Carbon::parse($d)->year)
+            ->map(fn ($d) => Carbon::parse($d)->year)
             ->unique()->sortDesc()->values();
-
 
         $incomesThisMonth = $user->incomes()->whereMonth('date', Carbon::now()->month)->whereYear('date', $request->year ?? $year)->get();
         $expensesThisMonth = $user->expenses()->whereMonth('date', Carbon::now()->month)->whereYear('date', $request->year ?? $year)->get();
         $totalBalances = $user->balances->sum('amount');
 
-        $monthlyIncomesChart = $user->incomes()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($i) => $i->date->month)->map(fn($g) => $g->sum('amount'));
+        $monthlyIncomesChart = $user->incomes()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn ($i) => $i->date->month)->map(fn ($g) => $g->sum('amount'));
 
-        $monthlyExpensesChart = $user->expenses()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($e) => $e->date->month)->map(fn($g) => $g->sum('amount'));
+        $monthlyExpensesChart = $user->expenses()->whereYear('date', $request->year ?? $year)->get()->groupBy(fn ($e) => $e->date->month)->map(fn ($g) => $g->sum('amount'));
 
         $incomeDataChart = [];
         $expenseDataChart = [];
@@ -37,17 +36,17 @@ class AdminController extends Controller
             $expenseDataChart[] = $monthlyExpensesChart->get($m, 0);
         }
 
-        $expensesByCategory = $user->expenses()->with('category')->whereYear('date', $request->year ?? $year)->get()->groupBy(fn($e) => $e->category?->name ?? 'Lainnya')->map(fn($g) => [
+        $expensesByCategory = $user->expenses()->with('category')->whereYear('date', $request->year ?? $year)->get()->groupBy(fn ($e) => $e->category?->name ?? 'Lainnya')->map(fn ($g) => [
             'total' => $g->sum('amount'),
-            'color' => $g->first()->category?->color ?? '#6b7280'
+            'color' => $g->first()->category?->color ?? '#6b7280',
         ]);
 
         $donutLabels = $expensesByCategory->keys()->values();
         $donutDatas = $expensesByCategory->pluck('total')->values();
         $donutColors = $expensesByCategory->pluck('color')->values();
 
-        $groupedBalances = $user->balances()->get()->groupBy(fn($b) => $b->tipe ?? 'Kosong')->map(fn($g) => [
-            'total' => $g->sum('amount')
+        $groupedBalances = $user->balances()->get()->groupBy(fn ($b) => $b->tipe ?? 'Kosong')->map(fn ($g) => [
+            'total' => $g->sum('amount'),
         ]);
 
         return view('dashboard', [
@@ -64,9 +63,9 @@ class AdminController extends Controller
             'donutDatas' => $donutDatas,
             'donutColors' => $donutColors,
             'groupedBalances' => $groupedBalances,
-            'newestIncomes' => $user->incomes()->orderByDesc('date')->latest()->take(5)->get(),
-            'newestExpenses' => $user->expenses()->orderByDesc('date')->latest()->take(5)->get(),
-            'years' => $years
+            'newestIncomes' => $user->incomes()->with('category', 'balance')->orderByDesc('date')->latest()->take(5)->get(),
+            'newestExpenses' => $user->expenses()->with('category', 'balance')->orderByDesc('date')->latest()->take(5)->get(),
+            'years' => $years,
         ]);
     }
 
@@ -88,7 +87,7 @@ class AdminController extends Controller
             'totalIncomes' => $totalIncomes,
             'totalThisMonth' => $totalIncomesThisMonth,
             'totalEntries' => $jumlahRowIncomes,
-            'incomes' => $user->incomes()->paginate(10),
+            'incomes' => $user->incomes()->with('category', 'balance')->paginate(10),
             'categories' => $categories,
             'balances' => $balances,
         ]);
@@ -125,7 +124,7 @@ class AdminController extends Controller
             'totalExpenses' => $totalExpenses,
             'totalThisMonth' => $totalExpensesThisMonth,
             'totalEntries' => $jumlahRowExpenses,
-            'expenses' => $user->expenses()->paginate(10),
+            'expenses' => $user->expenses()->with('category', 'balance')->paginate(10),
             'categories' => $categories,
             'balances' => $balances,
         ]);
